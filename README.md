@@ -7,5 +7,5 @@ This is a BepInEx mod for Gorilla Tag that plays a FNAF jumpscare when a player 
 3. Launch the game, and thats it
 
 ## Additional Info
-Custom jumpscares may be added if you build the mod yourself
+Custom jumpscares may be added if you build the mod yourself.
 If you want more mods like this and more exclusive mods that aren't available on my GitHub, join my [Discord server](https://quote.codes/discord)
