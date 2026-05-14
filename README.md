@@ -1,3 +1,4 @@
+![FNAFJumpscare Banner](/foxy.png)
 # FNAFJumpscare
 This is a BepInEx mod for Gorilla Tag that has a 1/400 chance to play a FNAF jumpscare every second.
 
