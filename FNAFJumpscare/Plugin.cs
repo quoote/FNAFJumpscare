@@ -1,56 +1,38 @@
+using System;
 using BepInEx;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace FNAFJumpscare;
 
 [BepInPlugin(Constants.Guid, Constants.ModName, Constants.Version)]
 public class Plugin : BaseUnityPlugin
 {
-    private bool initialized;
-    private bool wasTagged;
-    private bool triggeredThisTag;
+    private bool Initialized;
+    private int Chance = 400;
+    private float Timer;
 
     private void Start()
     {
         GorillaTagger.OnPlayerSpawned(() =>
         {
-            initialized = true;
+            Initialized = true;
         });
     }
 
-    // wow
     private void Update()
     {
-        var rig = GorillaTagger.Instance?.offlineVRRig;
-        if (!initialized || !rig)
+        if (!Initialized || !GorillaTagger.Instance?.offlineVRRig)
             return;
 
-        var isTagged = IsTagged();
+        Timer += Time.deltaTime;
 
-        if (isTagged && !wasTagged)
+        if (Timer >= 1f)
         {
-            triggeredThisTag = false;
+            Timer = 0f;
+            
+            if (Random.Range(0, Chance) == 0)
+                JumpscarePlayer.DoIt();
         }
-
-        if (isTagged && !triggeredThisTag)
-        {
-            triggeredThisTag = true;
-            JumpscarePlayer.DoIt();
-        }
-
-        wasTagged = isTagged;
-    }
-
-    public static bool IsTagged()
-    {
-        var materialName = GorillaTagger.Instance?.offlineVRRig?.mainSkin?.material?.name;
-        if (string.IsNullOrEmpty(materialName))
-            return false;
-
-        var name = materialName.ToLowerInvariant();
-
-        return name.Contains("fected")
-               || name.Contains("it")
-               || name.Contains("stealth");
     }
 }
