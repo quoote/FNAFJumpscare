@@ -8,39 +8,49 @@ public class Plugin : BaseUnityPlugin
 {
     private bool initialized;
     private bool wasTagged;
-    private float nextAllowedTime;
-
-    private const float Cooldown = 3f;
+    private bool triggeredThisTag;
 
     private void Start()
     {
-        GorillaTagger.OnPlayerSpawned(() => initialized = true);
+        GorillaTagger.OnPlayerSpawned(() =>
+        {
+            initialized = true;
+        });
     }
-    
-    // yes i know this is horrible submit a pr idc gorilla tag's tag shit is ass
+
+    // wow
     private void Update()
     {
-        if (!initialized || !VRRig.LocalRig)
+        var rig = GorillaTagger.Instance?.offlineVRRig;
+        if (!initialized || !rig)
             return;
 
         var isTagged = IsTagged();
 
-        if (!isTagged && wasTagged && Time.time >= nextAllowedTime)
+        if (isTagged && !wasTagged)
         {
-            nextAllowedTime = Time.time + Cooldown;
+            triggeredThisTag = false;
+        }
+
+        if (isTagged && !triggeredThisTag)
+        {
+            triggeredThisTag = true;
             JumpscarePlayer.DoIt();
         }
 
         wasTagged = isTagged;
     }
 
-    private static bool IsTagged()
+    public static bool IsTagged()
     {
-        var material = VRRig.LocalRig?.mainSkin?.material;
-        if (!material)
+        var materialName = GorillaTagger.Instance?.offlineVRRig?.mainSkin?.material?.name;
+        if (string.IsNullOrEmpty(materialName))
             return false;
 
-        var name = material.name;
-        return name.Contains("fected") || name.Contains("it") || name.Contains("stealth");
+        var name = materialName.ToLowerInvariant();
+
+        return name.Contains("fected")
+               || name.Contains("it")
+               || name.Contains("stealth");
     }
 }
