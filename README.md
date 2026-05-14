@@ -1,3 +1,4 @@
+![FNAFJumpscare Banner](/foxy.png)
 # FNAFJumpscare
 This is a BepInEx mod for Gorilla Tag that plays a FNAF jumpscare when a player tags you
 
